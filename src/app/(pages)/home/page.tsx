@@ -25,13 +25,13 @@ interface ExcelRow {
   "Địa chỉ": string;
   "Mã số thuế": string;
   "Email khách hàng": string;
-
   "Số HS": string;
   "Ngày HS": string;
   "HT thanh toán": string;
   "Mã phí": string;
   "Tên loại phí": string;
   "Số tiền": number;
+  "Đơn vị thu": string;
 }
 
 // Interface cho dữ liệu lỗi
@@ -64,6 +64,7 @@ interface ApiRequest {
     email: string;
     so_hs: string;
     ngay_hs: string;
+    dv_thu: string;
     ten: string;
     dchi: string;
     stknmua: string;
@@ -176,6 +177,7 @@ const Home = () => {
         "Mã phí": "1",
         "Tên loại phí": "Phí đăng ký đất đai",
         "Số tiền": 500000,
+        "Đơn vị thu": "Quận 1",
       },
     ];
 
@@ -322,6 +324,7 @@ const Home = () => {
       email: firstRow["Email khách hàng"] || "",
       so_hs: firstRow["Số HS"] || "",
       ngay_hs: convertDate(firstRow["Ngày HS"] || ""),
+      dv_thu: firstRow["Đơn vị thu"],
       ten: firstRow["Tên đơn vị nộp"] || "",
       dchi: firstRow["Địa chỉ"] || "",
       stknmua: "",
@@ -419,31 +422,29 @@ const Home = () => {
     if (errorData.length === 0) return;
 
     // Format lại dữ liệu và thêm thông tin lỗi
-    const exportData = errorData.map(
-      ({ errorCode, errorMessage, rowIndex, ...rest }) => {
-        // Format lại các cột ngày
-        const formattedData = { ...rest };
+    const exportData = errorData.map(({ errorCode, errorMessage, ...rest }) => {
+      // Format lại các cột ngày
+      const formattedData = { ...rest };
 
-        // Format "Ngày biên lai"
-        if (formattedData["Ngày biên lai"]) {
-          formattedData["Ngày biên lai"] = formatExcelDate(
-            formattedData["Ngày biên lai"]
-          );
-        }
-
-        // Format "Ngày HS"
-        if (formattedData["Ngày HS"]) {
-          formattedData["Ngày HS"] = formatExcelDate(formattedData["Ngày HS"]);
-        }
-
-        // Thêm thông tin lỗi vào cuối
-        return {
-          ...formattedData,
-          "Mã lỗi": errorCode,
-          "Thông báo lỗi": errorMessage,
-        };
+      // Format "Ngày biên lai"
+      if (formattedData["Ngày biên lai"]) {
+        formattedData["Ngày biên lai"] = formatExcelDate(
+          formattedData["Ngày biên lai"]
+        );
       }
-    );
+
+      // Format "Ngày HS"
+      if (formattedData["Ngày HS"]) {
+        formattedData["Ngày HS"] = formatExcelDate(formattedData["Ngày HS"]);
+      }
+
+      // Thêm thông tin lỗi vào cuối
+      return {
+        ...formattedData,
+        "Mã lỗi": errorCode,
+        "Thông báo lỗi": errorMessage,
+      };
+    });
 
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
@@ -854,7 +855,7 @@ const Home = () => {
               id="file"
               accept=".xlsx,.xls"
               onChange={handleFileSelect}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-gray-300 rounded-lg p-1"
             />
           </div>
 

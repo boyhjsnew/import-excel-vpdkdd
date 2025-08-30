@@ -165,7 +165,7 @@ const Login = () => {
         });
 
         setTimeout(() => {
-          router.push("/dashboard"); // hoặc trang bạn muốn chuyển đến
+          router.push("/home"); // hoặc trang bạn muốn chuyển đến
         }, 1000);
       } else if ("error" in data) {
         // Đăng nhập thất bại
