@@ -110,7 +110,7 @@ const Home = () => {
   ]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [getIDRow, setGetIDRow] = useState<string>("");
+  const [getIDRow] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [importProgress, setImportProgress] = useState(0);
