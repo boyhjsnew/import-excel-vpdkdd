@@ -12,6 +12,7 @@ export default function PagesLayout({
   const pathname = usePathname();
 
   useEffect(() => {
+    // Nếu đang ở trang chủ thì chuyển hướng đến auth
     if (pathname === "/") {
       router.push("/auth");
     }
